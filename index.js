@@ -1,10 +1,10 @@
 const express = require("express");
 const { userRouter } = require("./routes/user.routes.js");
 const { carRouter } = require("./routes/car.routes.js");
-
+const { connect } = require("./db.js");
 const main = async () => {
   // Conexión a la BBDD
-  const { connect } = require("./db.js");
+  
   const database = await connect();
 
   // Configuración del server
@@ -16,7 +16,7 @@ const main = async () => {
   // Rutas
   const router = express.Router();
   router.get("/", (req, res) => {
-    res.send(`Esta es la home de nuestra API. Estamos utilizando la BBDD de ${database.connection.name} `);
+    res.send(`Esta es la home de nuestra API. Estamos utilizando la BBDD de ${database} `);
   });
   router.get("*", (req, res) => {
     res.status(404).send("Lo sentimos :( No hemos encontrado la página solicitada.");

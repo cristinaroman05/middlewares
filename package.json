@@ -5,9 +5,11 @@
     "eslint": "^9.0.0",
     "express": "^4.19.2",
     "husky": "^9.0.11",
+    "mongodb": "^6.5.0",
     "mongoose": "^8.3.1",
     "node": "^18.20.1",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.4"
   },
   "name": "19.1-debugs",
   "version": "1.0.0",
@@ -23,5 +25,8 @@
     "prepare": "husky install"
   },
   "author": "cristina",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.6"
+  }
 }
