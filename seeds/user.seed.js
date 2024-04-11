@@ -49,7 +49,7 @@ const run = async () => {
     // Añadimos usuarios
     const documents = userList.map((user) => new User(user));
     await User.insertMany(documents);
-    console.log("Datos guardados correctamente!");
+    console.log("Usuarios creados correctamente!");
   } catch (error) {
     console.error("ERROR AL CONECTAR CON LA BBDD");
     console.error(error);

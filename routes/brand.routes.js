@@ -1,31 +1,28 @@
 const express = require("express");
 
 // Modelos
-const { Car } = require("../models/Car.js");
+const { Brand } = require("../models/Brand.js");
 
-// Router propio de usuarios
 const router = express.Router();
 
 // CRUD: READ
-// EJEMPLO DE REQ: http://localhost:3000/car?page=1&limit=10
 router.get("/", async (req, res) => {
   try {
     // Asi leemos query params
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
-    const cars = await Car.find()
+    const brands = await Brand.find()
       .limit(limit)
-      .skip((page - 1) * limit)
-      .populate(["owner", "brand"]);
+      .skip((page - 1) * limit);
 
     // Num total de elementos
-    const totalElements = await Car.countDocuments();
+    const totalElements = await Brand.countDocuments();
 
     const response = {
       totalItems: totalElements,
       totalPages: Math.ceil(totalElements / limit),
       currentPage: page,
-      data: cars,
+      data: brands,
     };
 
     res.json(response);
@@ -38,10 +35,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const car = await Car.findById(id) .populate(["owner", "brand"]);
-    ;
-    if (car) {
-      res.json(car);
+    const brand = await Brand.findById(id);
+    if (brand) {
+      res.json(brand);
     } else {
       res.status(404).json({});
     }
@@ -51,44 +47,40 @@ router.get("/:id", async (req, res) => {
 });
 
 // CRUD: Operación custom, no es CRUD
-router.get("/brand/:brand", async (req, res) => {
-  const brand = req.params.brand;
+router.get("/name/:name", async (req, res) => {
+  const brandName = req.params.name;
 
   try {
-    const car = await Car.find
-    ({ brand: new RegExp("^" + brand.toLowerCase(), "i") })
-     .populate(["owner", "brand"]);
-    ;
-    if (car?.length) {
-      res.json(car);
+    const brand = await Brand.find({ name: new RegExp("^" + brandName.toLowerCase(), "i") });
+    if (brand?.length) {
+      res.json(brand);
     } else {
       res.status(404).json([]);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });
 
-// Endpoint de creación de usuarios
 // CRUD: CREATE
 router.post("/", async (req, res) => {
   try {
-    const car = new Car(req.body);
-    const createdCar = await car.save();
-    return res.status(201).json(createdCar);
+    const brand = new Brand(req.body);
+    const createdBrand = await brand.save();
+    return res.status(201).json(createdBrand);
   } catch (error) {
     res.status(500).json(error);
   }
 });
 
-// Para elimnar coches
 // CRUD: DELETE
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const carDeleted = await Car.findByIdAndDelete(id);
-    if (carDeleted) {
-      res.json(carDeleted);
+    const brandDeleted = await Brand.findByIdAndDelete(id);
+    if (brandDeleted) {
+      res.json(brandDeleted);
     } else {
       res.status(404).json({});
     }
@@ -101,9 +93,9 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const carUpdated = await Car.findByIdAndUpdate(id, req.body, { new: true });
-    if (carUpdated) {
-      res.json(carUpdated);
+    const brandUpdated = await Brand.findByIdAndUpdate(id, req.body, { new: true });
+    if (brandUpdated) {
+      res.json(brandUpdated);
     } else {
       res.status(404).json({});
     }
@@ -112,4 +104,4 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-module.exports = { carRouter: router };
+module.exports = { brandRouter: router };
